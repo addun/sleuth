@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="description" content="" />
+    <meta name="generator" content="Hugo 0.83.1" />
+    <title>Charts</title>
+    <link
+      href="https://getbootstrap.com/docs/5.0/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      crossorigin="anonymous"
+    />
+
+    <!-- Custom styles for this template -->
+    <link
+      href="https://fonts.googleapis.com/css?family=Playfair&#43;Display:700,900&amp;display=swap"
+      rel="stylesheet"
+    />
+    <!-- Custom styles for this template -->
+    <link
+      href="https://getbootstrap.com/docs/5.0/examples/blog/blog.css"
+      rel="stylesheet"
+    />
+
+    <link
+      rel="stylesheet"
+      href="../node_modules/node-waves/dist/waves.min.css"
+    />
+
+    <style>
+      .ripple {
+        width: 10px;
+        height: 10px;
+        background-color: transparent;
+        position: fixed;
+        border-radius: 50%;
+        border: 1px solid red;
+      }
+
+      @keyframes ripple-effect {
+        to {
+          transform: scale(15);
+          opacity: 0.01;
+        }
+      }
+    </style>
+  </head>
+  <body style="height: 0">
+    <div id="actions" style="position: fixed; left: 10px; top: 10px"></div>
+
+    <div
+      id="fakePointer"
+      style="
+        position: fixed;
+        width: 25px;
+        height: 25px;
+        background: red;
+        z-index: 1500;
+      "
+    ></div>
+
+    <iframe src="/" style="width: 100vw; height: 100vh"></iframe>
+  </body>
+</html>

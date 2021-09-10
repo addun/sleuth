@@ -1,0 +1,32 @@
+{
+  "name": "@addun/sleuth",
+  "version": "0.0.0",
+  "description": "Record users on your page",
+  "main": "src/main.ts",
+  "scripts": {
+    "start": "webpack serve --open",
+    "build": "webpack --mode=production",
+    "test": "npm run test"
+  },
+  "keywords": [
+    "ts",
+    "rxjs",
+    "browser"
+  ],
+  "author": "Adrian Bury",
+  "license": "ISC",
+  "devDependencies": {
+    "html-loader": "^2.1.2",
+    "html-webpack-plugin": "^5.3.1",
+    "ts-loader": "^9.1.1",
+    "typescript": "^4.2.4",
+    "webpack": "^5.35.1",
+    "webpack-cli": "^4.6.0",
+    "webpack-dev-server": "^3.11.2"
+  },
+  "dependencies": {
+    "firebase": "^8.6.1",
+    "node-waves": "^0.7.6",
+    "rxjs": "^6.6.7"
+  }
+}
