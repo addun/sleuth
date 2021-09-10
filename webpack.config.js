@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: {
     main: "./src/main.ts",
-    charts: "./src/charts.ts",
+    charts: "./src/preview.ts",
   },
   mode: "development",
   module: {
@@ -34,9 +34,9 @@ module.exports = {
       filename: "index.html",
     }),
     new HtmlWebpackPlugin({
-      template: path.resolve(__dirname, "src/charts.html"),
-      chunks: ["charts"],
-      filename: "charts.html",
+      template: path.resolve(__dirname, "src/preview.html"),
+      chunks: ["preview"],
+      filename: "preview.html",
     }),
   ],
   devServer: {
