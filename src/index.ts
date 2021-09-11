@@ -1,14 +1,13 @@
+import firebaseApp from "firebase/app";
+import "firebase/firestore";
 import { fromEvent, merge } from "rxjs";
 import {
   bufferTime,
   debounceTime,
   filter,
   map,
-  tap,
   throttleTime,
 } from "rxjs/operators";
-import "firebase/firestore";
-import firebaseApp from "firebase/app";
 
 // Your web app's Firebase configuration
 const firebaseConfig = {
@@ -31,9 +30,12 @@ function mapToUserEvent(event: Event | MouseEvent | KeyboardEvent) {
     windowX: window.scrollX,
     windowY: window.scrollY,
   };
+
   if (event instanceof MouseEvent) {
+    console.log("mouse!!!", event.x);
     data.x = event.x;
     data.y = event.y;
+    console.log(data);
   }
 
   if (event instanceof KeyboardEvent) {
@@ -46,14 +48,15 @@ function mapToUserEvent(event: Event | MouseEvent | KeyboardEvent) {
 async function pushEventsToServer(events: any[]) {
   const batch = firestore.batch();
   events.forEach((event) => {
-    batch.set(firestore.collection("events").doc(), mapToUserEvent(event));
+    batch.set(firestore.collection("events").doc(), event);
   });
   return batch.commit();
 }
 
 const clickEvents$ = fromEvent<MouseEvent>(document, "click");
+
 const mouseMoveEvents$ = fromEvent<MouseEvent>(document, "mousemove").pipe(
-  throttleTime(150)
+  throttleTime(25)
 );
 
 const keyDownEvents$ = fromEvent<KeyboardEvent>(document, "keydown").pipe(
@@ -66,10 +69,11 @@ const scrollEvents$ = fromEvent<Event>(document, "scroll").pipe(
   debounceTime(100)
 );
 
-merge(clickEvents$, keyDownEvents$, scrollEvents$, mouseMoveEvents$)
+// merge(clickEvents$, keyDownEvents$, scrollEvents$, mouseMoveEvents$)
+merge(mouseMoveEvents$)
   .pipe(
     map((event) => mapToUserEvent(event)),
-    bufferTime(20_000, null, 50),
+    bufferTime(20_000, null, 5),
     filter((events) => events.length > 0)
   )
   .subscribe((events) => pushEventsToServer(events));

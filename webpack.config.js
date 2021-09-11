@@ -4,7 +4,7 @@ const HtmlWebpackPlugin = require("html-webpack-plugin");
 module.exports = {
   entry: {
     index: "./src/index.ts",
-    charts: "./src/preview.ts",
+    preview: "./src/preview.ts",
   },
   mode: "development",
   module: {
