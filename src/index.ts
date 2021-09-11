@@ -1,3 +1,6 @@
+import { fromEvent, merge } from "rxjs";
+import { bufferTime, debounceTime, filter, throttleTime } from "rxjs/operators";
+
 async function pushEventsToServer(events: Event[]) {
   return new Promise((resolve, reject) => {
     let t = setTimeout(() => {
@@ -7,32 +10,24 @@ async function pushEventsToServer(events: Event[]) {
   });
 }
 
-let eventsToSend: Event[] = [];
+const clickEvents$ = fromEvent<MouseEvent>(document, "click");
+const mouseMoveEvents$ = fromEvent<MouseEvent>(document, "mousemove").pipe(
+  throttleTime(150)
+);
 
-async function pushEventToCache($event: Event) {
-  eventsToSend.push($event);
-  if (eventsToSend.length === 10) {
-    await pushEventsToServer(eventsToSend);
-    eventsToSend = [];
-  }
-}
+const keyDownEvents$ = fromEvent<KeyboardEvent>(document, "keydown").pipe(
+  filter(($event) =>
+    ["Alt", "Control", "Shift"].every((code) => $event.key !== code)
+  )
+);
 
-document.onclick = async function ($event) {
-  pushEventToCache($event);
-};
+const scrollEvents$ = fromEvent<Event>(document, "scroll").pipe(
+  debounceTime(100)
+);
 
-document.onkeydown = async function ($event) {
-  if ($event.key !== "Enter") {
-    return;
-  }
-  pushEventToCache($event);
-};
-
-let currentTimeout = 0;
-document.onscroll = async function ($event) {
-  clearTimeout(currentTimeout);
-
-  currentTimeout = window.setTimeout(() => {
-    pushEventToCache($event);
-  }, 100);
-};
+merge(clickEvents$, keyDownEvents$, scrollEvents$, mouseMoveEvents$)
+  .pipe(
+    bufferTime(2_500, null, 3),
+    filter((events) => events.length > 0)
+  )
+  .subscribe((events) => pushEventsToServer(events));
